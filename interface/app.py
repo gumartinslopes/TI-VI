@@ -5,6 +5,8 @@ import customtkinter as ctk
 
 from pages.image_display import ImageDisplay
 from pages.initial_page import InitialPage
+from pages.loading_page import LoadingPage
+from pages.utils import image_handle
 
 customtkinter.set_appearance_mode('System') 
 customtkinter.set_default_color_theme(f'{os.getcwd()}/themes/flamingo.json')
@@ -58,8 +60,21 @@ class App(customtkinter.CTk):
         self.initial_page_frame.grid(row=0, column=0, sticky="nsew") 
         self.initial_page_frame.tkraise()
 
+    def show_loading_page(self, file_path):
+        self.initial_page_frame.grid_forget()
+        self.loading_page_frame = LoadingPage(self.container, self)
+        self.loading_page_frame.grid(row = 0, column = 0, sticky = "nsew")
+        self.loading_page_frame.tkraise()
+        self.after(1000 , lambda:self.show_image_display(file_path=file_path))
+
     def show_image_display(self, file_path):
-        # inicializacao do frame de visualizador de imagem
+        self.loading_page_frame.grid_forget()
+        #inicializacao do frame de visualizador de imagem
         self.image_visualizer_frame = ImageDisplay(self.container, self, file_path)
         self.image_visualizer_frame.grid(row = 0, column = 0, sticky = "nsew")
         self.image_visualizer_frame.tkraise()
+    
+    def new_image_display(self):
+        file_path = image_handle.select_file()
+        self.image_visualizer_frame.grid_forget()
+        self.show_loading_page(file_path=file_path)

@@ -1,26 +1,34 @@
 import customtkinter as ctk
 from .utils import image_handle
+from . widgets.result_tabview import ResultTabview
+
 
 class ImageDisplay(ctk.CTkFrame):
     def __init__(self,  parent, controller, img_path):
+        self.parent = parent
+        self.controller = controller
         ctk.CTkFrame.__init__(self,parent)
         self.main_image_path = img_path
         self.setup_grid()
         self.setup_sidebar()
         
-        self.img_label_title = ctk.CTkLabel(self,fg_color="#1C1B1B", text='Imagem Original', font=ctk.CTkFont(family='roboto', weight='bold', size=15))
+        self.img_label_title = ctk.CTkLabel(self.sidebar_frame,fg_color="#1C1B1B", text='Imagem Original', font=ctk.CTkFont(family='roboto', weight='bold', size=15))
         self.img_label_title.grid(row = 0, column = 0)
 
         # inicialização do label de imagem
-        self.img_label = ctk.CTkLabel(self, text='')
+        self.img_label = ctk.CTkLabel(self.sidebar_frame, text='')
         self.img_label.grid(row = 1, column = 0, padx = 20)
         self.configure_main_img(self.main_image_path)
 
-        self.btn_load = ctk.CTkButton(self, text='Nova Imagem', command=self.update_main_img)
+        self.btn_load = ctk.CTkButton(self.sidebar_frame, text='Nova Imagem', command=self.controller.new_image_display)
         self.btn_load.grid(row = 2, column = 0, pady = 10)
 
-        self.btn_save = ctk.CTkButton(self, text='Salvar Resultados')
-        self.btn_save.grid(row = 3, column = 0, pady = 10)
+        self.btn_save = ctk.CTkButton(self.sidebar_frame, text='Salvar Resultados')
+        self.btn_save.grid(row = 3, column = 0, pady = 5)
+
+        # setup da tabview
+        self.tabview = ResultTabview(self)
+        self.tabview.grid(row = 0, column = 1,padx = 20, pady = 20, sticky='nsew')
 
     def setup_grid(self):
         # configure grid layout (4x4)

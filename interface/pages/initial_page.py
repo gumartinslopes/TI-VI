@@ -16,7 +16,7 @@ class InitialPage(ctk.CTkFrame):
     # traca de página após selecionar uma imagem
     def switch_tabs(self):
         file_path = image_handle.select_file()
-        self.controller.show_image_display(file_path)
+        self.controller.show_loading_page(file_path)
 
 
     
