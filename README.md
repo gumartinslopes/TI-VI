@@ -12,3 +12,9 @@ Para instalar as dependências do projeto basta inserir o seguinte comando no te
 ```sh
 pip install -r requirements.txt
 ```
+## Executando 
+Para executar o aplicativo de interface gráfica basta rodar o arquivo ``main.py`` presente no diretório ``interface`` do projeto:
+
+```sh
+python main.py
+```
