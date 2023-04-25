@@ -63,4 +63,3 @@ class App(customtkinter.CTk):
         self.image_visualizer_frame = ImageDisplay(self.container, self, file_path)
         self.image_visualizer_frame.grid(row = 0, column = 0, sticky = "nsew")
         self.image_visualizer_frame.tkraise()
-        self.image_visualizer_frame.update_image(self._img_path)
