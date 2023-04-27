@@ -9,7 +9,7 @@ from pages.loading_page import LoadingPage
 from pages.utils import image_handle
 
 customtkinter.set_appearance_mode('System') 
-customtkinter.set_default_color_theme(f'{os.getcwd()}/themes/flamingo.json')
+customtkinter.set_default_color_theme(f'{os.getcwd()}/themes/omni.json')
 
 class App(customtkinter.CTk):
     def __init__(self):

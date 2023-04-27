@@ -10,7 +10,7 @@ class LoadingPage(ctk.CTkFrame):
         self.parent = parent
         ctk.CTkFrame.__init__(self,parent)
         label = ctk.CTkLabel(self, text="Processando Imagem...", font=("roboto bold", 20) )
-        label.pack(pady=10,padx=10)
+        label.pack(pady=30,padx=30)
         self.progress_bar = ctk.CTkProgressBar(self, mode='indeterminate')
         self.progress_bar.pack(pady = 30, padx = 10)
         self.progress_bar.start()

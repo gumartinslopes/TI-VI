@@ -1,7 +1,8 @@
 import customtkinter as ctk
 from .utils import image_handle
 from . widgets.result_tabview import ResultTabview
-
+from PIL import Image
+import os
 
 class ImageDisplay(ctk.CTkFrame):
     def __init__(self,  parent, controller, img_path):
@@ -20,15 +21,19 @@ class ImageDisplay(ctk.CTkFrame):
         self.img_label.grid(row = 1, column = 0, padx = 20)
         self.configure_main_img(self.main_image_path)
 
-        self.btn_load = ctk.CTkButton(self.sidebar_frame, text='Nova Imagem', command=self.controller.new_image_display)
-        self.btn_load.grid(row = 2, column = 0, pady = 10)
+        self.btn_load = ctk.CTkButton(self, text='Nova Imagem', command=self.controller.new_image_display)
+        self.btn_load.grid(row = 2, column = 1, pady = 10)
 
-        self.btn_save = ctk.CTkButton(self.sidebar_frame, text='Salvar Resultados')
-        self.btn_save.grid(row = 3, column = 0, pady = 5)
+        self.btn_save = ctk.CTkButton(self, text='Salvar Resultados')
+        self.btn_save.grid(row = 3, column = 1, pady = 5)
 
         # setup da tabview
         self.tabview = ResultTabview(self)
         self.tabview.grid(row = 0, column = 1,padx = 20, pady = 20, sticky='nsew')
+
+        self.theme_img = ctk.CTkImage(Image.open(os.getcwd() + '/imgs/moon.png'))
+        self.theme_btn = ctk.CTkButton(self, image=self.theme_img, text='', fg_color="transparent")
+        self.theme_btn.grid(row = 3, column = 0, sticky = "sw", padx = 10, pady = 10)
 
     def setup_grid(self):
         # configure grid layout (4x4)
