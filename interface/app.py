@@ -7,6 +7,7 @@ from pages.image_display import ImageDisplay
 from pages.initial_page import InitialPage
 from pages.loading_page import LoadingPage
 from pages.utils import image_handle
+from parquets import getparquets
 
 import pandas as pd
 import numpy as np
@@ -15,7 +16,7 @@ from sklearn.neighbors import KNeighborsRegressor, KNeighborsClassifier
 
 customtkinter.set_appearance_mode('System')
 customtkinter.set_default_color_theme(
-    f'{os.getcwd()}/themes/omni.json')
+    f'{os.getcwd()}/interface/themes/omni.json')
 
 
 class App(customtkinter.CTk):
@@ -79,7 +80,7 @@ class App(customtkinter.CTk):
         self.loading_page_frame.grid_forget()
         # inicializacao do frame de visualizador de imagem
         self.image_visualizer_frame = ImageDisplay(
-            self.container, self, file_path, self.knn)
+            self.container, self, file_path, self.knn, self.dfs[1])
         self.image_visualizer_frame.grid(row=0, column=0, sticky="nsew")
         self.image_visualizer_frame.tkraise()
 
@@ -90,8 +91,10 @@ class App(customtkinter.CTk):
         self.show_loading_page(file_path=file_path)
 
     def setKNN(self):
-        self.df_treino = pd.read_parquet(
-            f'{os.getcwd()}\parquets\embedding_training_set.parquet')
+        dfs = getparquets.getParquets()
+        print(dfs)
+        self.dfs = dfs
+        self.df_treino = dfs[0]
 
         X = np.vstack(self.df_treino["embedding"].values)
         y = self.df_treino['img_path'].values

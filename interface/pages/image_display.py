@@ -14,11 +14,12 @@ import requests
 
 
 class ImageDisplay(ctk.CTkFrame):
-    def __init__(self,  parent, controller, img_path, knn):
+    def __init__(self,  parent, controller, img_path, knn, df_test):
         self.parent = parent
         self.controller = controller
         ctk.CTkFrame.__init__(self, parent)
         self.main_image_path = img_path
+        self.df_teste = df_test
         self.setup_grid()
         self.setup_sidebar()
 
@@ -48,7 +49,6 @@ class ImageDisplay(ctk.CTkFrame):
         self.tabview = ResultTabview(self, dist, paths)
         self.tabview.grid(row=0, column=1, padx=20, pady=20, sticky='nsew')
 
-        self.df_teste = pd.read_parquet(f'{os.getcwd()}\parquets\embedding_testing_set.parquet')
         self.test_path = self.df_teste.sample(1).img_path.values[0]
 
         # self.theme_img = ctk.CTkImage(Image.open(
