@@ -8,7 +8,7 @@ def getParquets():
     # enter credentials
     account_name = 'clothessimilar6084886475'
     account_key = '2uI3KJBFT1J+e3prLGB9cPflPYOCcKaIkSC15CB2k3L2qlmnoPijl500M+ZPdUeOziiUORhBvJS7+AStJMaM2g=='
-    container_name = 'parquets'
+    container_name = 'parquetonlypaths'
 
     # create a client to interact with blob storage
     connect_str = 'DefaultEndpointsProtocol=https;AccountName=' + account_name + \
@@ -45,5 +45,7 @@ def getParquets():
 
         df_combined = pd.concat(df_list, ignore_index=True)
         df_treino_teste.append(df_combined)
+
+    print(df_treino_teste)
 
     return df_treino_teste

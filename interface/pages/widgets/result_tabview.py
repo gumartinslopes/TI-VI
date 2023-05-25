@@ -28,8 +28,6 @@ class ResultTabview(ctk.CTkTabview):
         self.setup_image_grid()
         self.setup_infotab()
 
-
-
     def setup_image_grid(self):
         self.image_grid = ctk.CTkScrollableFrame(self.tab(self.tabname1))
         self.image_grid.grid(row=0, column=0, sticky='nsew')
@@ -38,11 +36,12 @@ class ResultTabview(ctk.CTkTabview):
         j = 0
         i = 0
         num_cols = 3
-        for path in self.paths:
+        for path in self.paths[1:]:
             pil_img = image_handle.get_image(path)
-            img = ctk.CTkImage(light_image=pil_img, dark_image=pil_img, size=(200, 200))
+            img = ctk.CTkImage(light_image=pil_img,
+                               dark_image=pil_img, size=(200, 200))
             image_label = ctk.CTkLabel(self.image_grid, image=img, text='')
-            image_label.grid(row=i, column=j%num_cols, padx=20, pady=10)
+            image_label.grid(row=i, column=j % num_cols, padx=20, pady=10)
             self.image_labels.append(image_label)
             print(i, j % num_cols)
             j = j + 1

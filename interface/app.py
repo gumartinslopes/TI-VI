@@ -8,6 +8,7 @@ from pages.initial_page import InitialPage
 from pages.loading_page import LoadingPage
 from pages.utils import image_handle
 from parquets import getparquets
+import pickle
 
 import pandas as pd
 import numpy as np
@@ -80,7 +81,7 @@ class App(customtkinter.CTk):
         self.loading_page_frame.grid_forget()
         # inicializacao do frame de visualizador de imagem
         self.image_visualizer_frame = ImageDisplay(
-            self.container, self, file_path, self.knn, self.dfs[1])
+            self.container, self, file_path, self.knn)
         self.image_visualizer_frame.grid(row=0, column=0, sticky="nsew")
         self.image_visualizer_frame.tkraise()
 
@@ -92,14 +93,14 @@ class App(customtkinter.CTk):
 
     def setKNN(self):
         dfs = getparquets.getParquets()
-        print(dfs)
+        # print(dfs)
         self.dfs = dfs
         self.df_treino = dfs[0]
 
-        X = np.vstack(self.df_treino["embedding"].values)
-        y = self.df_treino['img_path'].values
+        # X = np.vstack(self.df_treino["embedding"].values)
+        # y = self.df_treino['img_path'].values
 
-        neigh = KNeighborsClassifier(n_neighbors=10, metric="cosine")
-        neigh.fit(X, y)
+        # neigh = KNeighborsClassifier(n_neighbors=10, metric="cosine")
+        # neigh.fit(X, y)
 
-        self.knn = neigh
+        self.knn = pickle.load(open('knnpickle_file', 'rb'))

@@ -14,12 +14,11 @@ import requests
 
 
 class ImageDisplay(ctk.CTkFrame):
-    def __init__(self,  parent, controller, img_path, knn, df_test):
+    def __init__(self,  parent, controller, img_path, knn):
         self.parent = parent
         self.controller = controller
         ctk.CTkFrame.__init__(self, parent)
         self.main_image_path = img_path
-        self.df_teste = df_test
         self.setup_grid()
         self.setup_sidebar()
         self.nearest = []
@@ -54,8 +53,6 @@ class ImageDisplay(ctk.CTkFrame):
             self.tabview = ResultTabview(self, dist, paths)
             self.tabview.grid(row=0, column=1, padx=20, pady=20, sticky='nsew')
 
-            self.test_path = self.df_teste.sample(1).img_path.values[0]
-
         elif len(img_path) > 1:
 
             self.getNearer()
@@ -83,7 +80,7 @@ class ImageDisplay(ctk.CTkFrame):
         paths_for_pdf = []
         for i, original_path in enumerate(self.main_image_path):
             # somente 9 imagens
-            self.dist_path_per_img[i][1] = self.dist_path_per_img[i][1][:-2]
+            self.dist_path_per_img[i][1] = self.dist_path_per_img[i][1][1:-1]
             paths_for_pdf.append(
                 [original_path] + self.dist_path_per_img[i][1])
 
