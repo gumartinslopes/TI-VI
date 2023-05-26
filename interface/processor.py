@@ -58,6 +58,7 @@ class Processor():
         res = self.image_preprocessing(path, return_body=False)
         #print(f"res: {res}")
         if res is not None:
+            # PARALELIZAR
             preds = self.model.predict(res, verbose=0)
          #   print(f"FEATURES: {preds}")
             return preds

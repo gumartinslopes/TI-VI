@@ -11,12 +11,14 @@ from .utils import image_handle
 from .processor import Processor
 
 customtkinter.set_appearance_mode('System')
-customtkinter.set_default_color_theme(
-    f'{os.getcwd()}/interface/themes/omni.json')
+customtkinter.set_default_color_theme('green')
+# customtkinter.set_default_color_theme(
+#     f'{os.getcwd()}/interface/themes/omni.json')
 
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
+        print(customtkinter.get_appearance_mode())
         self.processor = Processor()
         self.setup_window()
         self.setup_fullscreen()
@@ -69,7 +71,8 @@ class App(customtkinter.CTk):
         self.loading_page_frame.grid(row=0, column=0, sticky="nsew")
         self.loading_page_frame.tkraise()
         results = self.processor.get_nearest_urls(file_path)
-        self.after(1000, lambda: self.show_results_page(file_path, results))
+       # self.after(1000, lambda: self.show_results_page(file_path, results))
+        self.show_results_page(file_path, results)
 
     def show_results_page(self, file_path, results):
         self.loading_page_frame.grid_forget()
@@ -85,13 +88,12 @@ class App(customtkinter.CTk):
             )
             
         else:
-            dists, paths = results
+            result_dict = [{'dist':result[0],'paths': result[1]} for result in results]
             self.results_frame = MultipleImageResult(
                 parent = self.container, 
                 controller = self,
                 img_path_list = file_path, 
-                nearest_paths_list = paths,
-                dist_list = dists
+                result_dict = result_dict
             )   
             pass
         self.results_frame.grid(row=0, column=0, sticky="nsew")

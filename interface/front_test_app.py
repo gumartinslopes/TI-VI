@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from .pages.initial_page import InitialPage
 from .pages.result_pages.single_image_result import SingleImageResult
+from .pages.result_pages.multiple_image_result import MultipleImageResult
 from .pages.loading_page import LoadingPage
 from .utils import image_handle
 from .processor import Processor
@@ -10,13 +11,19 @@ class FrontTestApp(ctk.CTk):
         super().__init__()
         self.setup_window()
         self.setup_container()
-        self.processor = Processor()
+        #self.processor = Processor()
         #self.show_initial_page()
         self.filepath = ('C:/Users/gumar/faculdade/6oPeriodo/TIVI/TI-VI/interface/imgs/vestido.jpeg',)
-        dist, self.paths = self.processor.get_nearest_urls(self.filepath)[0]
-        #generic_path = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1HfAGEhO8vAQVI1xi6Kngd0Ol5YaIp-zE_Q&usqp=CAU'
-    
-        self.show_results_page()
+
+        #dist, self.paths = self.processor.get_nearest_urls(self.filepath)[0]
+        generic_path = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1HfAGEhO8vAQVI1xi6Kngd0Ol5YaIp-zE_Q&usqp=CAU'
+        self.paths = [
+            generic_path, generic_path, generic_path,
+            generic_path, generic_path, generic_path,
+            generic_path, generic_path, generic_path
+
+        ]
+        self.show_multiple_results()
         self.center_window()
     
     def setup_window(self):
@@ -44,7 +51,9 @@ class FrontTestApp(ctk.CTk):
     def setup_container(self):
         self.container = ctk.CTkFrame(self)
         self.container.pack(side="top", fill="both", expand=True)
-        self.container.grid_rowconfigure(0, weight=1)
+        self.container.grid_rowconfigure(0, weight=0)
+        self.container.grid_rowconfigure(1, weight=1)
+
         self.container.grid_columnconfigure(0, weight=1)
     
     def show_results_page(self):
@@ -55,6 +64,17 @@ class FrontTestApp(ctk.CTk):
             img_path = self.filepath[0], 
             nearest_paths = self.paths
         )
+        self.image_visualizer_frame.grid(row=1, column=0, sticky="nsew")
+        self.image_visualizer_frame.tkraise()
+    
+    def show_multiple_results(self):
+        self.image_visualizer_frame = MultipleImageResult(
+            parent = self.container, 
+            controller = self, 
+            img_path_list = self.filepath, 
+            result_dict = self.paths
+        )
+                
         self.image_visualizer_frame.grid(row=0, column=0, sticky="nsew")
         self.image_visualizer_frame.tkraise()
 
