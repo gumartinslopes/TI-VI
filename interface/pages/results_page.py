@@ -1,8 +1,8 @@
 import customtkinter as ctk
 import pandas as pd
 
-from .utils import image_handle
-from . widgets.result_tabview import ResultTabview
+from ..utils import image_handle
+from .widgets.result_tabview import ResultTabview
 from PIL import Image
 import os
 import tensorflow as tf
@@ -13,7 +13,7 @@ from io import BytesIO
 import requests
 
 
-class ImageDisplay(ctk.CTkFrame):
+class ResultsPage(ctk.CTkFrame):
     def __init__(self,  parent, controller, img_path, knn):
         self.parent = parent
         self.controller = controller
@@ -39,7 +39,7 @@ class ImageDisplay(ctk.CTkFrame):
             self.configure_main_img(self.main_image_path[0])
 
             self.btn_load = ctk.CTkButton(
-                self, text='Nova Imagem', command=self.controller.new_image_display)
+                self, text='Nova Imagem', command=self.controller.new_results_page)
             self.btn_load.grid(row=2, column=1, pady=10)
 
             self.btn_save = ctk.CTkButton(self, text='Salvar Resultados')
@@ -63,7 +63,7 @@ class ImageDisplay(ctk.CTkFrame):
             self.dist_path_per_img = dist_path_per_img
 
             self.btn_load = ctk.CTkButton(
-                self, text='Nova seleção de Imagens', command=self.controller.new_image_display)
+                self, text='Nova seleção de Imagens', command=self.controller.new_results_page)
             self.btn_load.grid(row=2, column=1, pady=10)
 
             self.btn_save = ctk.CTkButton(
@@ -120,8 +120,7 @@ class ImageDisplay(ctk.CTkFrame):
             print(e)
             return None
 
-    # obtem a lista de embeddings das imgs
-
+    # obtem a lista de embeddings das imgss
     def get_features(self, path):
         res = self.image_preprocessing(path, return_body=False)
         print(f"res: {res}")
@@ -153,7 +152,6 @@ class ImageDisplay(ctk.CTkFrame):
         return dist_path_per_img
 
     def getNearer(self):
-
         for path in self.main_image_path:
             one_img_features = self.get_features(path)
             print(f"FEATURES Nearer: {one_img_features}")

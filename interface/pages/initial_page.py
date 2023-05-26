@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from .utils import image_handle
+from .. utils import image_handle
 # Página inicial da aplicação
 
 
@@ -21,4 +21,4 @@ class InitialPage(ctk.CTkFrame):
         file_path = image_handle.select_file()
         print(f'FILE PATH{file_path}')
         if (file_path != ''):
-            self.controller.show_loading_page(file_path)
+            self.controller.load_results(file_path)

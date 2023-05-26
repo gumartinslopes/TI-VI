@@ -3,31 +3,25 @@ import os
 from tkinter import *
 import customtkinter as ctk
 
-from pages.image_display import ImageDisplay
-from pages.initial_page import InitialPage
-from pages.loading_page import LoadingPage
-from pages.utils import image_handle
-from parquets import getparquets
-import pickle
-
-import pandas as pd
-import numpy as np
-import sklearn
-from sklearn.neighbors import KNeighborsRegressor, KNeighborsClassifier
+from .pages.initial_page import InitialPage
+from .pages.loading_page import LoadingPage
+from .pages.result_pages.single_image_result import SingleImageResult
+from .pages.result_pages.multiple_image_result import MultipleImageResult
+from .utils import image_handle
+from .processor import Processor
 
 customtkinter.set_appearance_mode('System')
 customtkinter.set_default_color_theme(
     f'{os.getcwd()}/interface/themes/omni.json')
 
-
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
+        self.processor = Processor()
         self.setup_window()
         self.setup_fullscreen()
         self.setup_container()
         self.center_window()
-        self.setKNN()
         self.show_initial_page()
 
     def setup_window(self):
@@ -69,38 +63,40 @@ class App(customtkinter.CTk):
         self.initial_page_frame.grid(row=0, column=0, sticky="nsew")
         self.initial_page_frame.tkraise()
 
-    def show_loading_page(self, file_path):
+    def load_results(self, file_path):
         self.initial_page_frame.grid_forget()
         self.loading_page_frame = LoadingPage(self.container, self)
         self.loading_page_frame.grid(row=0, column=0, sticky="nsew")
         self.loading_page_frame.tkraise()
-        print(f"file path show_loading: {file_path}")
-        self.after(1000, lambda: self.show_image_display(file_path))
+        results = self.processor.get_nearest_urls(file_path)
+        self.after(1000, lambda: self.show_results_page(file_path, results))
 
-    def show_image_display(self, file_path):
+    def show_results_page(self, file_path, results):
         self.loading_page_frame.grid_forget()
         # inicializacao do frame de visualizador de imagem
-        self.image_visualizer_frame = ImageDisplay(
-            self.container, self, file_path, self.knn)
-        self.image_visualizer_frame.grid(row=0, column=0, sticky="nsew")
-        self.image_visualizer_frame.tkraise()
-
-    def new_image_display(self):
+        if len(file_path) == 1:
+            dists, paths = results[0]
+            self.results_frame = SingleImageResult(
+                parent = self.container, 
+                controller = self,
+                img_path = file_path[0], 
+                nearest_paths = paths,
+                dists = dists
+            )
+            
+        else:
+            dists, paths = results
+            self.results_frame = MultipleImageResult(
+                parent = self.container, 
+                controller = self,
+                img_path_list = file_path, 
+                nearest_paths_list = paths,
+                dist_list = dists
+            )   
+            pass
+        self.results_frame.grid(row=0, column=0, sticky="nsew")
+        self.results_frame.tkraise()
+    def new_results_page(self):
         file_path = image_handle.select_file()
-        self.image_visualizer_frame.grid_forget()
-        print(f"FILE_PATH={file_path}")
-        self.show_loading_page(file_path=file_path)
-
-    def setKNN(self):
-        dfs = getparquets.getParquets()
-        # print(dfs)
-        self.dfs = dfs
-        self.df_treino = dfs[0]
-
-        # X = np.vstack(self.df_treino["embedding"].values)
-        # y = self.df_treino['img_path'].values
-
-        # neigh = KNeighborsClassifier(n_neighbors=10, metric="cosine")
-        # neigh.fit(X, y)
-
-        self.knn = pickle.load(open('knnpickle_file', 'rb'))
+        self.results_frame.grid_forget()
+        self.load_results(file_path=file_path)

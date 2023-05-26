@@ -1,5 +1,4 @@
-from app import App
-    
+from interface.app import App
 if __name__ == '__main__':
     app = App()
     app.mainloop()

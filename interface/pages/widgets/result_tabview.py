@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from ..utils import image_handle
+from ...utils import image_handle
 import os
 from PIL import Image
 import requests
@@ -43,7 +43,6 @@ class ResultTabview(ctk.CTkTabview):
             image_label = ctk.CTkLabel(self.image_grid, image=img, text='')
             image_label.grid(row=i, column=j % num_cols, padx=20, pady=10)
             self.image_labels.append(image_label)
-            print(i, j % num_cols)
             j = j + 1
             if j % num_cols == 0:
                 i = (i+1) % num_cols
