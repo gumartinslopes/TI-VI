@@ -7,10 +7,10 @@ from .pages.initial_page import InitialPage
 from .pages.loading_page import LoadingPage
 from .pages.result_pages.single_image_result import SingleImageResult
 from .pages.result_pages.multiple_image_result import MultipleImageResult
-from .utils import image_handle
-from .processor import Processor
+from .utils import file_handle, constants
+from .utils.processor import Processor
 
-customtkinter.set_appearance_mode('System')
+customtkinter.set_appearance_mode('Light')
 customtkinter.set_default_color_theme('green')
 # customtkinter.set_default_color_theme(
 #     f'{os.getcwd()}/interface/themes/omni.json')
@@ -73,7 +73,13 @@ class App(customtkinter.CTk):
         results = self.processor.get_nearest_urls(file_path)
        # self.after(1000, lambda: self.show_results_page(file_path, results))
         self.show_results_page(file_path, results)
-
+   
+    def change_appearance_mode(self):
+        if ctk.get_appearance_mode() == constants.DARK_MODE:
+            ctk.set_appearance_mode(constants.LIGHT_MODE)
+        else:
+            ctk.set_appearance_mode(constants.DARK_MODE)
+   
     def show_results_page(self, file_path, results):
         self.loading_page_frame.grid_forget()
         # inicializacao do frame de visualizador de imagem
@@ -98,7 +104,9 @@ class App(customtkinter.CTk):
             pass
         self.results_frame.grid(row=0, column=0, sticky="nsew")
         self.results_frame.tkraise()
+    
     def new_results_page(self):
-        file_path = image_handle.select_file()
-        self.results_frame.grid_forget()
-        self.load_results(file_path=file_path)
+        file_path = file_handle.select_file()
+        if file_path != '':
+            self.results_frame.grid_forget()
+            self.load_results(file_path=file_path)

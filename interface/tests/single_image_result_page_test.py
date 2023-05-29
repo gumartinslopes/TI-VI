@@ -1,12 +1,12 @@
 import customtkinter as ctk
-from .pages.initial_page import InitialPage
-from .pages.result_pages.single_image_result import SingleImageResult
-from .pages.result_pages.multiple_image_result import MultipleImageResult
-from .pages.loading_page import LoadingPage
-from .utils import image_handle
-from .processor import Processor
+from ..pages.initial_page import InitialPage
+from ..pages.result_pages.single_image_result import SingleImageResult
+from ..pages.result_pages.multiple_image_result import MultipleImageResult
+from ..pages.loading_page import LoadingPage
+from ..utils import file_handle, constants
+from ..utils.processor import Processor
 
-class FrontTestApp(ctk.CTk):
+class SIRPTApp(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.setup_window()
@@ -23,7 +23,9 @@ class FrontTestApp(ctk.CTk):
             generic_path, generic_path, generic_path
 
         ]
-        self.show_multiple_results()
+        self.dists = [1,2,3,4,5,6,7,8,9]
+        #self.show_multiple_results()
+        self.show_results_page()
         self.center_window()
     
     def setup_window(self):
@@ -62,6 +64,7 @@ class FrontTestApp(ctk.CTk):
             parent = self.container, 
             controller = self, 
             img_path = self.filepath[0], 
+            dists = self.dists,
             nearest_paths = self.paths
         )
         self.image_visualizer_frame.grid(row=1, column=0, sticky="nsew")
@@ -79,10 +82,17 @@ class FrontTestApp(ctk.CTk):
         self.image_visualizer_frame.tkraise()
 
     def new_results_page(self):
-        file_path = image_handle.select_file()
-        self.image_visualizer_frame.grid_forget()
-        self.show_loading_page(file_path=file_path)
-    
+        file_path = file_handle.select_file()
+        if file_path != '':
+            self.image_visualizer_frame.grid_forget()
+            self.show_loading_page(file_path=file_path)
+
+    def change_appearance_mode(self):
+        if ctk.get_appearance_mode() == constants.DARK_MODE:
+            ctk.set_appearance_mode(constants.LIGHT_MODE)
+        else:
+            ctk.set_appearance_mode(constants.DARK_MODE)
+
     def show_loading_page(self, file_path):
         self.loading_page_frame = LoadingPage(self.container, self)
         self.loading_page_frame.grid(row=0, column=0, sticky="nsew")

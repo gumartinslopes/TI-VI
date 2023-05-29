@@ -1,7 +1,7 @@
 import customtkinter as ctk
 import pandas as pd
 
-from ..utils import image_handle
+from ..utils import file_handle
 from .widgets.result_tabview import ResultTabview
 from PIL import Image
 import os
@@ -87,7 +87,7 @@ class ResultsPage(ctk.CTkFrame):
         for path_list in paths_for_pdf:
             print(path_list)
             print('')
-        image_handle.savePDF(paths_for_pdf)
+        file_handle.savePDF(paths_for_pdf)
 
     def setup_grid(self):
         # configure grid layout (4x4)
@@ -160,8 +160,8 @@ class ResultsPage(ctk.CTkFrame):
 
     def configure_main_img(self, file_path):
         self.img_label.configure(
-            image=image_handle.open_ctk_img(file_path, (400, 500)))
+            image=file_handle.open_ctk_img(file_path, (400, 500)))
         self.getNearer()
 
     def update_main_img(self):
-        self.configure_main_img(image_handle.select_file())
+        self.configure_main_img(file_handle.select_file())

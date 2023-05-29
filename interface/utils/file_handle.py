@@ -1,10 +1,10 @@
 from tkinter import filedialog as fd
+from tkinter import messagebox
 from PIL import Image
 import customtkinter as ctk
 import requests
 from io import BytesIO
 from PIL import Image
-from fpdf import FPDF
 import os
 
 
@@ -41,16 +41,12 @@ def get_image(image_url, size=(200, 200), resize=True):
     return img.resize(size)
 
 
-def savePDF(image_paths):
-
-    # Get the path to the user's Downloads folder
-    downloads_path = os.path.expanduser("~") + "/Downloads"
-
-    # Specify the name of the folder you want to create
+def saveResults(image_paths):
+    save_path = fd.askdirectory()
     folder_name = "Results_CIICAM"
 
     # Create the full path by joining the downloads path and folder name
-    parent_folder_path = os.path.join(downloads_path, folder_name)
+    parent_folder_path = os.path.join(save_path, folder_name)
 
     # Create the folder
     if not os.path.exists(parent_folder_path):
@@ -82,3 +78,17 @@ def savePDF(image_paths):
             image.save(os.path.join(folder_path, image_name))
 
     print("Images saved in:", parent_folder_path)
+
+
+def save_images(images, save_path = '', names = None, ask_path = False):
+    save_path = fd.askdirectory() if ask_path else save_path
+    if save_path != '':
+        names = names if names != None else [i for i in range(len(images))]
+        if not os.path.exists(save_path):
+            os.makedirs(save_path)
+
+        for i in range(len(images)):
+            caminho_imagem = os.path.join(save_path, f"{names[i]}.png")
+            images[i].save(caminho_imagem)
+    else:
+         messagebox.showinfo("Alerta", "Nenhum diretório foi selecionado!")

@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from .. utils import image_handle
+from ..utils import file_handle
 # Página inicial da aplicação
 
 
@@ -18,6 +18,6 @@ class InitialPage(ctk.CTkFrame):
 
     # traca de página após selecionar uma imagem
     def switch_tabs(self):
-        file_path = image_handle.select_file()
+        file_path = file_handle.select_file()
         if (file_path != ''):
             self.controller.load_results(file_path)

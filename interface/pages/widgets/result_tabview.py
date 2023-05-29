@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from ...utils import image_handle
+from ...utils import file_handle
 from .image_grid import ImageGrid
 import os
 from PIL import Image
@@ -52,3 +52,6 @@ class ResultTabview(ctk.CTkTabview):
         self.info4 = ctk.CTkLabel(
             self.info_grid, text='Info 4: Result', font=('roboto bold', 20))
         self.info4.grid(row=4, column=0, padx=20, pady=10)
+    
+    def get_imgs(self):
+        return self.image_grid.get_imgs()

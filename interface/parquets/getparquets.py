@@ -2,7 +2,6 @@ from datetime import datetime, timedelta
 from azure.storage.blob import BlobServiceClient, generate_blob_sas, BlobSasPermissions
 import pandas as pd
 
-
 def getParquets():
 
     # enter credentials
@@ -46,6 +45,6 @@ def getParquets():
         df_combined = pd.concat(df_list, ignore_index=True)
         df_treino_teste.append(df_combined)
 
-    print(df_treino_teste)
+    #print(df_treino_teste)
 
     return df_treino_teste

@@ -1,4 +1,4 @@
-from .parquets import getparquets
+from ..parquets import getparquets
 import pickle
 from PIL import Image
 import tensorflow as tf

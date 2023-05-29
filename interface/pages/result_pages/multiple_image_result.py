@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from ...utils import image_handle
+from ...utils import file_handle
 
 class MultipleImageResult(ctk.CTkFrame):
     def __init__(self,  parent, controller, img_path_list, result_dict):
@@ -45,4 +45,4 @@ class MultipleImageResult(ctk.CTkFrame):
         for path_list in paths_for_pdf:
             print(path_list)
             print('')
-        image_handle.savePDF(paths_for_pdf)
+        file_handle.savePDF(paths_for_pdf)
