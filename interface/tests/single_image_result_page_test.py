@@ -4,7 +4,7 @@ from ..pages.result_pages.single_image_result import SingleImageResult
 from ..pages.result_pages.multiple_image_result import MultipleImageResult
 from ..pages.loading_page import LoadingPage
 from ..utils import file_handle, constants
-from ..utils.processor import Processor
+import os
 
 class SIRPTApp(ctk.CTk):
     def __init__(self):
@@ -13,7 +13,7 @@ class SIRPTApp(ctk.CTk):
         self.setup_container()
         #self.processor = Processor()
         #self.show_initial_page()
-        self.filepath = ('C:/Users/gumar/faculdade/6oPeriodo/TIVI/TI-VI/interface/imgs/vestido.jpeg',)
+        self.filepath = (f'{os.getcwd()}/interface/imgs/vestido.jpeg',)
 
         #dist, self.paths = self.processor.get_nearest_urls(self.filepath)[0]
         generic_path = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1HfAGEhO8vAQVI1xi6Kngd0Ol5YaIp-zE_Q&usqp=CAU'
