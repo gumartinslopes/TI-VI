@@ -13,6 +13,7 @@ class SingleImageResult(ctk.CTkFrame):
         self.main_image_path = img_path
         self.nearest_paths = nearest_paths
         self.dists = dists
+        self.download_nearest_imgs()
 
         self.setup_grid()
         self.setup_sidebar()
@@ -20,6 +21,12 @@ class SingleImageResult(ctk.CTkFrame):
         self.setup_tabview()
         self.setup_btns()
     
+    def download_nearest_imgs(self):
+        self.nearest_imgs = []
+        for path in self.nearest_paths:
+            pil_img = file_handle.get_image(path)
+            self.nearest_imgs.append(pil_img)
+        
     def setup_grid(self):
         # configure grid layout (4x4)
         self.grid_columnconfigure(1, weight=1)
@@ -81,7 +88,7 @@ class SingleImageResult(ctk.CTkFrame):
         self.appearance_mode_btn.configure(text=appearance_txt, text_color=txt_color)
 
     def setup_tabview(self):
-        self.tabview = ResultTabview(self, self.dists, self.nearest_paths)
+        self.tabview = ResultTabview(self, self.dists, self.nearest_imgs)
         self.tabview.grid(row=0, column=1, columnspan = 2,padx=20, pady=20, sticky='nsew')
 
     def setup_btns(self):

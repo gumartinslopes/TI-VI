@@ -13,19 +13,33 @@ class MIRTApp(ctk.CTk):
         self.setup_container()
         #self.processor = Processor()
         #self.show_initial_page()
-        self.filepath = (f'{os.getcwd()}/interface/imgs/vestido.jpeg',)
+        self.mock_filepaths = [
+            f'{os.getcwd()}/interface/imgs/vestido.jpeg',
+            f'{os.getcwd()}/interface/imgs/azul2.jpg'
+        ]
 
         #dist, self.paths = self.processor.get_nearest_urls(self.filepath)[0]
         generic_path = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1HfAGEhO8vAQVI1xi6Kngd0Ol5YaIp-zE_Q&usqp=CAU'
-        self.paths = [
-            generic_path, generic_path, generic_path,
-            generic_path, generic_path, generic_path,
-            generic_path, generic_path, generic_path
+        generic_path_2 = 'https://images.tcdn.com.br/img/img_prod/699026/vestido_longo_ombro_so_turquesa_1365_3_d21eb19d0d56bf7250f84785610250ad.jpg'
 
+        self.mock_results = [
+            [
+                generic_path, generic_path, generic_path,
+                generic_path, generic_path, generic_path,
+                generic_path, generic_path, generic_path
+            ],
+            [
+                generic_path_2, generic_path_2, generic_path_2,
+                generic_path_2, generic_path_2, generic_path_2,
+                generic_path_2, generic_path_2, generic_path_2
+            ]
         ]
-        self.dists = [1,2,3,4,5,6,7,8,9]
-        #self.show_multiple_results()
-        self.show_results_page()
+        self.mock_dists = [
+            [1,2,3,4,5,6,7,8,9],
+            [1,2,3,4,5,6,7,8,9],
+        ]
+
+        self.show_multiple_results()
         self.center_window()
     
     def setup_window(self):
@@ -58,27 +72,16 @@ class MIRTApp(ctk.CTk):
 
         self.container.grid_columnconfigure(0, weight=1)
     
-    def show_results_page(self):
-        # inicializacao do frame de visualizador de imagem
-        self.image_visualizer_frame = SingleImageResult(
-            parent = self.container, 
-            controller = self, 
-            img_path = self.filepath[0], 
-            dists = self.dists,
-            nearest_paths = self.paths
-        )
-        self.image_visualizer_frame.grid(row=1, column=0, sticky="nsew")
-        self.image_visualizer_frame.tkraise()
-    
     def show_multiple_results(self):
         self.image_visualizer_frame = MultipleImageResult(
             parent = self.container, 
             controller = self, 
-            img_path_list = self.filepath, 
-            result_dict = self.paths
+            img_path_list=self.mock_filepaths, 
+            result_list=self.mock_results, 
+            dist_list=self.mock_dists
         )
                 
-        self.image_visualizer_frame.grid(row=0, column=0, sticky="nsew")
+        self.image_visualizer_frame.grid(row=0, column=0, sticky="nsew", rowspan = 4)
         self.image_visualizer_frame.tkraise()
 
     def new_results_page(self):

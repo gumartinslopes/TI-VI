@@ -8,12 +8,13 @@ from io import BytesIO
 
 
 class ResultTabview(ctk.CTkTabview):
-    def __init__(self, parent, dist, paths):
+    def __init__(self, parent, dist, imgs, num_cols = 3):
         self.parent = parent
+        self.num_cols = num_cols
         ctk.CTkTabview.__init__(self, parent)
 
-        self.dist = dist
-        self.paths = paths
+        self.dists = dist
+        self.imgs = imgs
 
         self.tabname1 = 'Maiores Semelhanças'
         self.tabname2 = 'Informações'
@@ -29,8 +30,12 @@ class ResultTabview(ctk.CTkTabview):
         self.setup_image_grid()
         self.setup_infotab()
 
+    def update_info(self, imgs, dists):
+        self.dists = dists
+        self.image_grid.update_info(imgs)
+
     def setup_image_grid(self):
-        self.image_grid = ImageGrid(master = self.tab(self.tabname1), paths = self.paths, num_cols=3)
+        self.image_grid = ImageGrid(master = self.tab(self.tabname1), imgs = self.imgs, num_cols=self.num_cols)
         self.image_grid.grid(row=0, column=0, sticky='nsew')
 
     def setup_infotab(self):
