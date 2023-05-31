@@ -18,7 +18,6 @@ customtkinter.set_default_color_theme('green')
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
-        print(customtkinter.get_appearance_mode())
         self.processor = Processor()
         self.setup_window()
         self.setup_fullscreen()
@@ -85,23 +84,31 @@ class App(customtkinter.CTk):
         # inicializacao do frame de visualizador de imagem
         if len(file_path) == 1:
             dists, paths = results[0]
+
             self.results_frame = SingleImageResult(
-                parent = self.container, 
-                controller = self,
-                img_path = file_path[0], 
-                nearest_paths = paths,
-                dists = dists
+                parent=self.container,
+                controller=self,
+                img_path=file_path[0],
+                nearest_paths=paths,
+                dists=dists[0]
             )
             
         else:
-            result_dict = [{'dist':result[0],'paths': result[1]} for result in results]
+            dist_list = []
+            result_list = []
+
+            for result in results:
+                dists, paths = result
+                dist_list.append(dists[0])
+                result_list.append(paths)
+
             self.results_frame = MultipleImageResult(
-                parent = self.container, 
-                controller = self,
-                img_path_list = file_path, 
-                result_dict = result_dict
+                parent=self.container, 
+                controller=self,
+                img_path_list=file_path, 
+                result_list=result_list,
+                dist_list=dist_list
             )   
-            pass
         self.results_frame.grid(row=0, column=0, sticky="nsew")
         self.results_frame.tkraise()
     

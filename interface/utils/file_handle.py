@@ -80,10 +80,10 @@ def saveResults(image_paths):
     print("Images saved in:", parent_folder_path)
 
 
-def save_images(images, save_path = '', names = None, ask_path = False):
+def save_images(images,names = [], save_path = '', ask_path = False):
     save_path = fd.askdirectory() if ask_path else save_path
     if save_path != '':
-        names = names if names != None else [i for i in range(len(images))]
+        names = names if len(names)!= 0 else [i for i in range(len(images))]
         if not os.path.exists(save_path):
             os.makedirs(save_path)
 

@@ -78,8 +78,10 @@ class Processor():
         dfs = getparquets.getParquets()
         # print(dfs)
         self.dfs = dfs
-        self.df_treino = dfs[0]
-
+        # -----------------------------------------------------------------------------------------
+        #self.df_treino = dfs[0] 
+        self.df_treino = dfs
+        #------------------------------------------------------------------------------------------
         # X = np.vstack(self.df_treino["embedding"].values)
         # y = self.df_treino['img_path'].values
 

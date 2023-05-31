@@ -33,6 +33,7 @@ class ResultTabview(ctk.CTkTabview):
     def update_info(self, imgs, dists):
         self.dists = dists
         self.image_grid.update_info(imgs)
+        self.update_infotab(dists)
 
     def setup_image_grid(self):
         self.image_grid = ImageGrid(master = self.tab(self.tabname1), imgs = self.imgs, num_cols=self.num_cols)
@@ -41,22 +42,16 @@ class ResultTabview(ctk.CTkTabview):
     def setup_infotab(self):
         self.info_grid = ctk.CTkFrame(self.tab(self.tabname2))
         self.info_grid.grid(row=0, column=0, sticky='nsew')
+        self.infos = []
+        
+        for i in range(len(self.dists)):
+            info = ctk.CTkLabel(self.info_grid, text=f'Distância para a Imagem {i + 1}: {self.dists[i]:.2f}', 
+                                                                                font=('roboto bold', 20))
+            info.grid(row=i, column=0, padx=10, pady=10)
+            self.infos.append(info)
+    def update_infotab(self, dists):
+        for i in range(len(self.dists)):
+            self.infos[i].configure(text=f'Distância para a Imagem {i + 1}: {self.dists[i]:.2f}')
 
-        self.info1 = ctk.CTkLabel(
-            self.info_grid, text='Info 1: Result', font=('roboto bold', 20))
-        self.info1.grid(row=1, column=0, padx=20, pady=10)
-
-        self.info2 = ctk.CTkLabel(
-            self.info_grid, text='Info 2: Result', font=('roboto bold', 20))
-        self.info2.grid(row=2, column=0, padx=20, pady=10)
-
-        self.info3 = ctk.CTkLabel(
-            self.info_grid, text='Info 3: Result', font=('roboto bold', 20))
-        self.info3.grid(row=3, column=0, padx=20, pady=10)
-
-        self.info4 = ctk.CTkLabel(
-            self.info_grid, text='Info 4: Result', font=('roboto bold', 20))
-        self.info4.grid(row=4, column=0, padx=20, pady=10)
-    
     def get_imgs(self):
         return self.image_grid.get_imgs()

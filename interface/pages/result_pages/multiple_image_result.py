@@ -129,4 +129,4 @@ class MultipleImageResult(ctk.CTkFrame):
 
         for i in range(len(self.img_path_list)):
             result_path = f'{save_path}/result_{i + 1}' 
-            file_handle.save_images(images=self.nearest_imgs[i], names=self.dist_list[i], ask_path=False, save_path=result_path)
+            file_handle.save_images(images=self.nearest_imgs[i], ask_path=False, save_path=result_path)

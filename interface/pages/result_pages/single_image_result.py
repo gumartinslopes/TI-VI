@@ -112,4 +112,4 @@ class SingleImageResult(ctk.CTkFrame):
     #         print('')
     #     file_handle.saveResults(paths_for_pdf)
     def save_results(self):
-        file_handle.save_images(images=self.tabview.get_imgs(), names=self.dists, ask_path=True)
+        file_handle.save_images(images=self.tabview.get_imgs(), ask_path=True)
