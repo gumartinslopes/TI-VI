@@ -9,6 +9,9 @@ import pandas as pd
 import numpy as np
 import sklearn
 from sklearn.neighbors import KNeighborsRegressor, KNeighborsClassifier
+import concurrent.futures
+import multiprocessing
+import time 
 
 class Processor():
     def __init__(self):
@@ -58,7 +61,6 @@ class Processor():
         res = self.image_preprocessing(path, return_body=False)
         #print(f"res: {res}")
         if res is not None:
-            # PARALELIZAR
             preds = self.model.predict(res, verbose=0)
          #   print(f"FEATURES: {preds}")
             return preds
@@ -66,21 +68,43 @@ class Processor():
             return list(list())
         
     def getNearer(self, paths):
-        nearest = []
-        for path in paths:
-            one_img_features = self.get_features(path)
+        # CODIGO SEQUENCIAL 
+        # nearest = []
+        # for path in paths:
+            # one_img_features = self.get_features(path)
             #print(f"FEATURES Nearer: {one_img_features}")
-            found_neighbors = self.knn.kneighbors(one_img_features)
-            nearest.append(found_neighbors)
+            # found_neighbors = self.knn.kneighbors(one_img_features)
+            # nearest.append(found_neighbors)
+        # return nearest
+
+        #CODIGO PARALELO COM concurrent.futures
+        nearest = []
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            #Submit each path to the executor
+            futures = [executor.submit(self.get_features, path) for path in paths]
+            #Retrieve the results as they become available
+            for future in concurrent.futures.as_completed(futures):
+                result = future.result()
+                found_neighbors = self.knn.kneighbors(result)
+                nearest.append(found_neighbors)
         return nearest
+    
+        #CODIGO PARALELO COM multiprocessing
+        # nearest = []
+        # with multiprocessing.Pool() as pool:
+            # results = pool.map(self.get_features, paths)
+            # for result in results:
+                # found_neighbors = self.knn.kneighbors(result)
+                # nearest.append(found_neighbors)     
+        # return nearest
     
     def setKNN(self):
         dfs = getparquets.getParquets()
         # print(dfs)
         self.dfs = dfs
         # -----------------------------------------------------------------------------------------
-        #self.df_treino = dfs[0] 
-        self.df_treino = dfs
+        self.df_treino = dfs[0] 
+        #self.df_treino = dfs
         #------------------------------------------------------------------------------------------
         # X = np.vstack(self.df_treino["embedding"].values)
         # y = self.df_treino['img_path'].values
