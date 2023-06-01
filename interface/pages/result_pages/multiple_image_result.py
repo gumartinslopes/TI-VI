@@ -4,6 +4,8 @@ from ...utils import file_handle, constants
 from ..widgets.result_tabview import ResultTabview
 import os
 from PIL import Image
+import concurrent.futures
+import time
 
 class MultipleImageResult(ctk.CTkFrame):
     def __init__(self,  parent, controller, img_path_list, result_list, dist_list):
@@ -122,11 +124,23 @@ class MultipleImageResult(ctk.CTkFrame):
         self.tabview = ResultTabview(self, self.dist_list[0], self.nearest_imgs[0], num_cols=2)
         self.tabview.grid(row=0, column=2, columnspan = 2,rowspan = 2, padx=20, pady=20, sticky='nsew')
         
+    def save_result(self, index):
+        result_path = f'{self.save_path}/result_{index + 1}'
+        file_handle.save_images(images=self.nearest_imgs[index], ask_path=False, save_path=result_path)
+
     def save_results(self):
+        # save_path = fd.askdirectory()
+        # if not os.path.exists(save_path):
+            # os.makedirs(save_path)
+
+        # for i in range(len(self.img_path_list)):
+            # result_path = f'{save_path}/result_{i + 1}' 
+            # file_handle.save_images(images=self.nearest_imgs[i], ask_path=False, save_path=result_path)
+
+        #Codigo Paralelo
         save_path = fd.askdirectory()
         if not os.path.exists(save_path):
             os.makedirs(save_path)
 
-        for i in range(len(self.img_path_list)):
-            result_path = f'{save_path}/result_{i + 1}' 
-            file_handle.save_images(images=self.nearest_imgs[i], ask_path=False, save_path=result_path)
+        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+            executor.map(self.save_result, range(len(self.img_path_list)))
