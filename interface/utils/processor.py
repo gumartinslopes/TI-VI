@@ -79,7 +79,7 @@ class Processor():
 
         #CODIGO PARALELO COM concurrent.futures
         nearest = []
-        with concurrent.futures.ThreadPoolExecutor() as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
             #Submit each path to the executor
             futures = [executor.submit(self.get_features, path) for path in paths]
             #Retrieve the results as they become available
