@@ -50,6 +50,5 @@ import os
 #     df_treino_teste = pd.read_parquet(sas_url)
 #     return df_treino_teste
 def getParquets():  
-    df_treino_teste = pd.read_parquet(
-            f'{os.getcwd()}/interface/parquets/data/embedding_training_set.parquet')
-    return df_treino_teste
+   df = pd.read_parquet('./df.parquet')
+   return [df]
