@@ -1,9 +1,20 @@
 import customtkinter as ctk
-from . . utils import image_handle
+from ...utils import file_handle
+from .image_grid import ImageGrid
+import os
+from PIL import Image
+import requests
+from io import BytesIO
+
+
 class ResultTabview(ctk.CTkTabview):
-    def __init__(self, parent):
+    def __init__(self, parent, dist, imgs, num_cols = 3):
         self.parent = parent
-        ctk.CTkTabview.__init__(self,parent)
+        self.num_cols = num_cols
+        ctk.CTkTabview.__init__(self, parent)
+
+        self.dists = dist
+        self.imgs = imgs
 
         self.tabname1 = 'Maiores Semelhanças'
         self.tabname2 = 'Informações'
@@ -11,57 +22,36 @@ class ResultTabview(ctk.CTkTabview):
         self.add(self.tabname1)
         self.add(self.tabname2)
 
-        
-        self.tab(self.tabname1).grid_columnconfigure(0,weight=1)
-        self.tab(self.tabname1).grid_rowconfigure(0,weight=1)
-        self.tab(self.tabname2).grid_columnconfigure(0,weight=1)
-        self.tab(self.tabname2).grid_rowconfigure(0,weight=1)
+        self.tab(self.tabname1).grid_columnconfigure(0, weight=1)
+        self.tab(self.tabname1).grid_rowconfigure(0, weight=1)
+        self.tab(self.tabname2).grid_columnconfigure(0, weight=1)
+        self.tab(self.tabname2).grid_rowconfigure(0, weight=1)
 
         self.setup_image_grid()
-        self.setup_infotab()        
-    
+        self.setup_infotab()
+
+    def update_info(self, imgs, dists):
+        self.dists = dists
+        self.image_grid.update_info(imgs)
+        self.update_infotab(dists)
 
     def setup_image_grid(self):
-        self.image_grid = ctk.CTkScrollableFrame(self.tab(self.tabname1))
-        self.image_grid.grid(row = 0, column = 0, sticky = 'nsew')
+        self.image_grid = ImageGrid(master = self.tab(self.tabname1), imgs = self.imgs, num_cols=self.num_cols)
+        self.image_grid.grid(row=0, column=0, sticky='nsew')
 
-        img1 = image_handle.open_ctk_img('C:/Users/gumar/faculdade/6oPeriodo/TIVI/TI-VI/interface/imgs/azul2.jpg', (200,200))
-        self.image1 = ctk.CTkLabel(self.image_grid,image=img1, text='')
-        self.image1.grid(row  = 0,column = 0)
-        
-        self.image2 = ctk.CTkLabel(self.image_grid,image=img1, text='')
-        self.image2.grid(row = 0, column = 1, padx = 10, pady = 10)
-
-        self.image1 = ctk.CTkLabel(self.image_grid,image=img1, text='')
-        self.image1.grid(row  = 0,column = 0)
-        
-        self.image2 = ctk.CTkLabel(self.image_grid,image=img1, text='')
-        self.image2.grid(row = 0, column = 1, padx = 10, pady = 10)
-
-        self.image3 = ctk.CTkLabel(self.image_grid,image=img1, text='')
-        self.image3.grid(row  = 1,column = 0)
-        
-        self.image4 = ctk.CTkLabel(self.image_grid,image=img1, text='')
-        self.image4.grid(row = 1, column = 1, padx = 5, pady = 10)
-
-        self.image5 = ctk.CTkLabel(self.image_grid,image=img1, text='')
-        self.image5.grid(row  = 0, column = 2)
-        
-        self.image6 = ctk.CTkLabel(self.image_grid,image=img1, text='')
-        self.image6.grid(row = 1, column = 2, padx = 5, pady = 10)
-
-    def setup_infotab(self): 
+    def setup_infotab(self):
         self.info_grid = ctk.CTkFrame(self.tab(self.tabname2))
-        self.info_grid.grid(row = 0, column = 0, sticky = 'nsew')
+        self.info_grid.grid(row=0, column=0, sticky='nsew')
+        self.infos = []
+        
+        for i in range(len(self.dists)):
+            info = ctk.CTkLabel(self.info_grid, text=f'Distância para a Imagem {i + 1}: {self.dists[i]:.2f}', 
+                                                                                font=('roboto bold', 20))
+            info.grid(row=i, column=0, padx=10, pady=10)
+            self.infos.append(info)
+    def update_infotab(self, dists):
+        for i in range(len(self.dists)):
+            self.infos[i].configure(text=f'Distância para a Imagem {i + 1}: {self.dists[i]:.2f}')
 
-        self.info1 = ctk.CTkLabel(self.info_grid, text='Info 1: Result', font=('roboto bold', 20))
-        self.info1.grid(row  = 1,column = 0, padx = 20, pady = 10)
-        
-        self.info2 = ctk.CTkLabel(self.info_grid, text='Info 2: Result', font=('roboto bold', 20))
-        self.info2.grid(row  = 2,column = 0, padx = 20, pady = 10)
-        
-        self.info3 = ctk.CTkLabel(self.info_grid, text='Info 3: Result', font=('roboto bold', 20))
-        self.info3.grid(row  = 3,column = 0, padx = 20, pady = 10)
-        
-        self.info4 = ctk.CTkLabel(self.info_grid, text='Info 4: Result', font=('roboto bold', 20))
-        self.info4.grid(row  = 4,column = 0, padx = 20, pady = 10)
+    def get_imgs(self):
+        return self.image_grid.get_imgs()

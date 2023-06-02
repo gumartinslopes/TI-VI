@@ -1,1 +1,6 @@
 *__pycache__/
+fodase.py
+resultado/
+*.idea/
+examples/
+interface/parquets/data/

@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from .utils import image_handle
+from ..utils import file_handle
 import time
 
 # Página inicial da aplicação
